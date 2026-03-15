@@ -1,10 +1,24 @@
-import Image from "next/image";
-import axios from "axios"
-export default async function Home() {
-  const response = await fetch("http://localhost:3000/app/api/chat")
-  const result = await response.json();
+"use client"
 
-  return (
-    <div>{result.message}</div>
-  );
+import axios from "axios"
+import { useEffect, useState } from "react"
+
+export default function Home() {
+  const [message, setMessage] = useState("")
+
+  useEffect(() => {
+    const fetch1 = async () => {
+      try {
+        const response = await axios.get("/api/chat")
+        setMessage(response.data.message)
+      } catch (error) {
+        console.error(error)
+        setMessage("Failed to fetch message")
+      }
+    }
+
+    fetch1()
+  }, [])
+
+  return <div>{message}</div>
 }
